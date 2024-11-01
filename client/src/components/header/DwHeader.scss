@@ -7,6 +7,13 @@
     position: fixed;
     width: 100%;
 
+    .navbar-brand {
+        font-weight: bold;
+        img {
+            height: 26px;
+        }
+    }
+
     nav {
         padding: 0;
     }

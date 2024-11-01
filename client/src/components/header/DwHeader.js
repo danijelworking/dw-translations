@@ -1,100 +1,52 @@
-import DwEnvironmentSelect from "../environment-select/DwEnvironmentSelect";
 import React from "react";
-import CreatableSelect from "react-select/creatable";
 import {
-    ButtonGroup,
     Container,
-    Dropdown,
-    DropdownButton,
     Nav,
     Navbar,
-    NavDropdown
 } from "react-bootstrap";
-import {IoSettingsOutline} from "react-icons/io5";
 import "./DwHeader.scss";
+import {useNavigate} from "react-router-dom";
 
 export const DwHeader = (props) => {
-    const { clients, defaultClient, onClientChange, onOptionsButtonClick, size = 'xl' } = props;
+    const { navigation, children } = props;
+    const navigate = useNavigate();
 
-    const renderClientsSelect = () => {
-        if (clients && defaultClient) {
-            return <CreatableSelect
-                className="dw-projects-select"
-                onChange={onClientChange}
-                value={clients.find(client => client.value === defaultClient)}
-                options={clients}
-            />;
-        } else {
-            return null;
+    const onNavItemSelect = (link) => {
+        navigate({pathname: link});
+    };
+
+    const navigationItems = () => {
+        return navigation.map((item, idx) => {
+           return (
+               <Nav.Link key={idx} eventKey={item.link}>{item.label}</Nav.Link>
+           )
+        });
+    }
+
+    const getChildren = (type) => {
+        if (children && children.props) {
+            return children.props.id === type ? children.props.children : [];
         }
-    };
 
-    const handleNewProject = () => {
-        onOptionsButtonClick('newProject');
-    };
-
-    const handleEditProject = () => {
-        onOptionsButtonClick('editProject');
-    };
-
-    const handleDeleteProject = () => {
-        onOptionsButtonClick('deleteProject');
-    };
-
-    const handleImport = () => {
-        onOptionsButtonClick('importTranslations');
-    };
-
-    const handleExport = () => {
-        onOptionsButtonClick('exportTranslations');
-    };
-
-    const handleSelectedExport = () => {
-        onOptionsButtonClick('exportSelectedTranslations');
-    };
-
-    const handleApiKeys = () => {
-        onOptionsButtonClick('apiKeys');
-    };
+        return children ? children.filter(child => child.props.id === type) : []
+    }
 
     return (
         <div className='dw-header'>
             <Navbar expand="lg">
                 <Container fluid>
-                    <Navbar.Brand href="#">  <img src="/api/images/logo.png" alt="" height={30} /></Navbar.Brand>
+                    <Navbar.Brand href="/"> {getChildren('logo')} </Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="navbarScroll">
                         <Nav
+                            onSelect={onNavItemSelect}
                             className="me-auto my-2 my-lg-0"
                             style={{ maxHeight: '100px' }}
                             navbarScroll
                         >
-                            <Nav.Link href="#action1">Translations</Nav.Link>
+                            {navigationItems('extras')}
                         </Nav>
-
-                        <div className="dw-settings d-flex">
-                            {renderClientsSelect()}
-                            <DwEnvironmentSelect></DwEnvironmentSelect>
-                            <DropdownButton
-                                as={ButtonGroup}
-                                key={'Primary'}
-                                id={`dropdown-variants-primary`}
-                                variant={'link'}
-                                size="sm"
-                                style={{marginLeft: '10px'}}
-                                title={<IoSettingsOutline size={30}/>}
-                            >
-                                <Dropdown.Item onClick={handleNewProject}>New Project</Dropdown.Item>
-                                <Dropdown.Item onClick={handleEditProject}>Edit Project</Dropdown.Item>
-                                <Dropdown.Item onClick={handleDeleteProject}>Delete Project</Dropdown.Item>
-                                <Dropdown.Divider></Dropdown.Divider>
-                                <Dropdown.Item onClick={handleImport}>Import Translations</Dropdown.Item>
-                                {/*<Dropdown.Item onClick={handleExport}>Export Translations</Dropdown.Item>*/}
-                                <Dropdown.Item onClick={handleSelectedExport}>Export Selected Translations</Dropdown.Item>
-                                {/*<Dropdown.Divider></Dropdown.Divider>
-                                <Dropdown.Item onClick={handleApiKeys}>Api-Keys</Dropdown.Item>*/}
-                            </DropdownButton>
-                        </div>
+                        {getChildren('extras')}
                     </Navbar.Collapse>
                 </Container>
             </Navbar>

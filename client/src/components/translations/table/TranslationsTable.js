@@ -20,7 +20,7 @@ const TranslationsTable = () => {
 
     const onAddBtnClick = () => {
         navigate({
-            pathname: `/details/${state.filter.client}/add`,
+            pathname: `/demo/details/${state.filter.client}/add`,
         });
     };
 
@@ -28,7 +28,7 @@ const TranslationsTable = () => {
         state.onEditButtonClick();
         if (row.key !== '') {
             navigate({
-                pathname: `/details/${state.filter.client}/${row.key}`,
+                pathname: `/demo/details/${state.filter.client}/${row.key}`,
                 search: `locale=${row.language}-${row.country}`
             });
         }
@@ -38,7 +38,7 @@ const TranslationsTable = () => {
         if (selectedRows.length === 1) {
             const row = selectedRows[0];
             navigate({
-                pathname: `/details/${state.filter.client}/${row.key}`,
+                pathname: `/demo/details/${state.filter.client}/${row.key}`,
             });
         }
     };

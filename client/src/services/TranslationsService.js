@@ -1,13 +1,3 @@
-export async function findOneTranslation(client, id = 0) {
-    const response = await fetch(`/api/translations/v1/findOne?id=${id}&client=${client}`);
-    return await response.json();
-}
-
-export async function findTranslation(client, key = "") {
-    const response = await fetch(`/api/translations/v1/find?key=${key}&client=${client}`);
-    return await response.json();
-}
-
 export async function updateTranslations({client, entries}) {
     const response = await fetch('/api/translations/v1/update', {
         method: 'post',

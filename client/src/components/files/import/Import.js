@@ -1,18 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react';
-import Button from 'react-bootstrap/Button';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { FaFileImport } from "react-icons/fa6";
 import { importTranslations } from "../../../services/TranslationsService";
 import { danger, success, info } from "../../toast/DwToastHelper";
-import { TranslationsContext } from "../DwTranslations";
-import Papa from 'papaparse'; // Importiere PapaParse
+import {flattenJSON, parseCSV} from "./Utils";
+import DwButtons from "../../buttons/DwButtons";
 
 function Import(props) {
-    const state = useContext(TranslationsContext);
     const [file, setFile] = useState(null);
     const [client] = useState('DW001'); // Beispiel für einen festen Client
 
-    const handleClose = () => props.setShow(false);
+    const handleClose = () => props.onClose(false);
 
     useEffect(() => {
         if (props.show) {
@@ -46,12 +44,11 @@ function Import(props) {
                     data = await parseCSV(event.target.result); // CSV in JSON umwandeln
                 }
 
-                // API-Call zur Übersetzungs-Import-Funktion
                 try {
                     const response = await importTranslations(client, data, {}); // Leeres Objekt für Länder und Sprachen
                     if (response.success) {
                         success("Import erfolgreich abgeschlossen!");
-                        props.onImportSuccess(); // Rufe die Aktualisierungsfunktion auf
+                        props.onSuccess(); // Rufe die Aktualisierungsfunktion auf
                         handleClose(); // Schließe das Modal
                     } else {
                         danger("Fehler beim Import.");
@@ -67,61 +64,6 @@ function Import(props) {
         };
 
         reader.readAsText(file);
-    };
-
-
-    const flattenJSON = (data) => {
-        const result = {};
-        Object.keys(data).forEach(locale => {
-            Object.keys(data[locale]).forEach(namespace => {
-                const flatKeys = flattenObject(data[locale][namespace], namespace); // Namespace hier behalten
-                Object.assign(result, {
-                    [locale]: {
-                        ...result[locale],
-                        ...flatKeys,
-                    }
-                });
-            });
-        });
-        return result;
-    };
-
-    const flattenObject = (obj, namespace = '') => {
-        return Object.keys(obj).reduce((acc, key) => {
-            const pre = namespace.length ? `${namespace}.` : '';
-            if (typeof obj[key] === 'object' && obj[key] !== null) {
-                Object.assign(acc, flattenObject(obj[key], `${pre}${key}`));
-            } else {
-                acc[`${pre}${key}`] = obj[key];
-            }
-            return acc;
-        }, {});
-    };
-
-    const parseCSV = (csv) => {
-        return new Promise((resolve, reject) => {
-            Papa.parse(csv, {
-                header: true, // Nutze die erste Zeile als Header
-                skipEmptyLines: true,
-                complete: (results) => {
-                    const translations = {};
-                    results.data.forEach(row => {
-                        const locale = row.locale;
-                        const key = row.key;
-                        const value = row.value;
-
-                        if (!translations[locale]) {
-                            translations[locale] = {};
-                        }
-                        translations[locale][key] = value; // Füge den Wert hinzu
-                    });
-                    resolve(translations);
-                },
-                error: (error) => {
-                    reject(error); // Fehler beim Parsen zurückgeben
-                }
-            });
-        });
     };
 
     return (
@@ -140,12 +82,14 @@ function Import(props) {
                     />
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Abbrechen
-                    </Button>
-                    <Button variant="primary" onClick={handleUpload} disabled={!file}>
-                        Hochladen
-                    </Button>
+                    <DwButtons
+                        button='cancel'
+                        onClick={handleClose}
+                    />
+                    <DwButtons
+                        button='import'
+                        onClick={handleUpload}
+                    />
                 </Modal.Footer>
             </Modal>
         </>

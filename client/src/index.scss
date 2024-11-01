@@ -1,5 +1,48 @@
+
+
+$pagination-active-bg: #005d6c !default;
+$pagination-color: #000 !default;
+$pagination-bg: #ffffff !default;
+$pagination-border-color: #ccc !default;
+
+$pagination-hover-color: #000 !default;
+$pagination-hover-bg: #ccc !default;
+$pagination-hover-border-color: #ccc !default;
+
+$pagination-active-color: #ffffff !default;
+$pagination-active-bg: #005d6c !default;
+$pagination-active-border-color: #005d6c !default;
+
+$pagination-disabled-color: #ccc !default;
+$pagination-disabled-bg: #ffffff !default;
+$pagination-disabled-border-color: #ccc !default;
+
+$primary: #005d6c;
+
+$navbar-light-color: #005d6c;
+$navbar-light-hover-color: rgba($navbar-light-color, .7);
+$navbar-light-active-color: rgba($navbar-light-color, .9);
+
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+
+/*$theme-colors: (
+        primary: #005d6c,
+        info: #d10505,
+        danger: #d10505,
+        link-primary: #005d6c,
+        text-primary: #005d6c,
+        btn-primary: #005d6c,
+        btn-link: #005d6c
+);*/
+
+
+
+
+
 @import 'bootstrap/scss/bootstrap';
 @import "../node_modules/flag-icons/css/flag-icons.min.css";
+
 
 
 body {

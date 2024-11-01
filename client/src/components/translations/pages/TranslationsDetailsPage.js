@@ -78,7 +78,7 @@ const TranslationsDetailsPage = () => {
     const onCancelDetailsForm = () => {
         setEntries(entriesDefaults);
         navigate({
-            pathname: `/`,
+            pathname: `/translations`,
         });
     };
 

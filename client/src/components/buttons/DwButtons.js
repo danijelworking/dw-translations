@@ -1,7 +1,8 @@
 import React, {useRef} from 'react';
-import {FaFilePen, FaPencil, FaPlus, FaRegFloppyDisk, FaTrashCan, FaX} from "react-icons/fa6";
+import {FaFileImport, FaFilePen, FaPencil, FaPlus, FaRegFloppyDisk, FaTrashCan, FaX} from "react-icons/fa6";
 import "./DwButtons.scss";
 import Button from "react-bootstrap/Button";
+import {FaFileExport} from "react-icons/fa";
 
 const DwButtons = (props) => {
     const target = useRef(null);
@@ -31,9 +32,9 @@ const DwButtons = (props) => {
             case 'cancel':
                 return cancelButton();
             case 'import':
-                return addButton();
+                return importButton();
             case 'export':
-                return addButton();
+                return exportButton();
             case 'custom':
                 return customButton();
 
@@ -41,7 +42,7 @@ const DwButtons = (props) => {
     }
 
     const addButton = () => (
-        <Button  onClick={onClick} type={type} className="btn btn-success" disabled={disabled} size={size}>
+        <Button  onClick={onClick} type={type} className="btn btn-primary" disabled={disabled} size={size}>
             <span className='icon'><FaPlus/></span> Add
         </Button >
     );
@@ -79,6 +80,18 @@ const DwButtons = (props) => {
     const customButton = () => (
         <Button  onClick={onClick} type={type} className={'btn btn-' + classes} disabled={disabled} size={size}>
             <span className='icon'>{icon}</span> {text}
+        </Button >
+    );
+
+    const importButton = () => (
+        <Button  onClick={onClick} type={type} className="btn btn-success" disabled={disabled} size={size}>
+            <span className='icon'><FaFileImport /></span> Import
+        </Button >
+    );
+
+    const exportButton = () => (
+        <Button  onClick={onClick} type={type} className="btn btn-success" disabled={disabled} size={size}>
+            <span className='icon'><FaFileExport /></span> Export {text}
         </Button >
     );
 
